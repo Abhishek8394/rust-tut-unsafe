@@ -6,7 +6,7 @@ edition = "2018"
 
 [lib]
 name = "unsafe_tut"
-crate-type = ["staticlib", "cdylib", "rlib"]
+crate-type = ["staticlib", "cdylib"]
 
 
 [dependencies]
