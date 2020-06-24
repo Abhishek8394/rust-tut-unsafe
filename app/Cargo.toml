@@ -1,0 +1,9 @@
+[package]
+name = "unsafe_tut_app"
+version = "0.1.0"
+authors = ["Abhishek Patel <5524161+Abhishek8394@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+unsafe_tut_core = { path = "../core" }
+

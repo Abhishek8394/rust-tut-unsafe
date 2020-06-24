@@ -1,0 +1,8 @@
+[package]
+name = "unsafe_tut_core"
+version = "0.1.0"
+authors = ["Abhishek Patel <5524161+Abhishek8394@users.noreply.github.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["staticlib", "cdylib", "rlib"]

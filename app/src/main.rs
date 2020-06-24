@@ -1,5 +1,5 @@
 use std::slice;
-// use unsafe_tut;
+use unsafe_tut_core;
 /// call code defined in C language!
 /// This is a FFI - Foreign function interface
 extern "C" {
@@ -53,7 +53,7 @@ fn main() {
             println!("abs(-3) as defined in C language is {}", abs(-3));
         }
 
-        // unsafe_tut::hello_rust();
+        unsafe_tut_core::hello_rust();
     }
 }
 
