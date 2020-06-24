@@ -1,5 +1,5 @@
 use std::slice;
-
+use unsafe_tut;
 /// call code defined in C language!
 /// This is a FFI - Foreign function interface
 extern "C" {
@@ -46,12 +46,14 @@ fn main() {
 
         let mut v1 = vec![10, 20, 40, 50, 60, 70];
         let (c, d) = my_split_at_mut(&mut v1[..], 2);
-        assert_eq!(&mut [10, 20], a);
-        assert_eq!(&mut [40, 50, 60, 70], b);
+        assert_eq!(&mut [10, 20], c);
+        assert_eq!(&mut [40, 50, 60, 70], d);
 
         unsafe{
             println!("abs(-3) as defined in C language is {}", abs(-3));
         }
+
+        unsafe_tut::hello_rust();
     }
 }
 
