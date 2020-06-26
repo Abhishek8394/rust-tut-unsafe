@@ -1,9 +1,5 @@
 #include <stdio.h>
-
-
-extern "rust" {
-	hello_rust;
-}
+#include "hello.h"
 
 int main(){
 	printf("Welcome to C land pilot!\n");
