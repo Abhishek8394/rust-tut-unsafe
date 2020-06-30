@@ -1,5 +1,10 @@
+use std::ops::{Add};
 use std::slice;
+use std::fmt;
 use unsafe_tut_core;
+mod overload;
+use crate::overload::{overload_demo};
+
 /// call code defined in C language!
 /// This is a FFI - Foreign function interface
 extern "C" {
@@ -54,6 +59,52 @@ fn main() {
         }
 
         unsafe_tut_core::hello_rust();
+
+        {
+            println!("\nOperator overloading.");
+            let x = Point{x: 1, y: 10};
+            let y = Point{x: 9, y: 100};
+            println!("x {:?} + y {:?}", x, y);
+            let res = x + y;
+            println!("= {:?}", res);
+            assert_eq!(Point{x: 10, y: 110}, res);
+            println!("Adding 2 diff types");
+            let mm = Millimeters(900);
+            let m = Meters(1);
+            println!("{:?} + {:?}", mm, m);
+            let res = mm + m;
+            println!("{:?}", res);
+            println!("Same method name overloading..");
+            overload_demo();
+            // demo for when overloading cannot be done.
+        }
+        {
+            println!("\nSupertrait demo");
+            // Since Outlinedemo requires Display trait to be implemented, 
+            println!("Display trait is supertrait of outlinedemo.");
+            
+            trait OutlineDemo: fmt::Display{
+                fn outline_print(&self){
+                    let output = self.to_string();
+                    let len = output.len();
+                    println!("{}", "*".repeat(len + 4));
+                    println!("*{}*", " ".repeat(len + 2));
+                    println!("* {} *", output);
+                    println!("*{}*", " ".repeat(len + 2));
+                    println!("{}", "*".repeat(len + 4));
+                }
+            }
+
+            struct DisplayPoint{x: i32, y:i32}
+            impl fmt::Display for DisplayPoint{
+                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+                    write!(f, "({}, {})", self.x, self.y)
+                }
+            }
+            impl OutlineDemo for DisplayPoint{}
+            let dp = DisplayPoint{x: -10, y: 5};
+            dp.outline_print();
+        }
     }
 }
 
@@ -74,5 +125,43 @@ fn my_split_at_mut(v: &mut [i32], mid: usize) -> (&mut [i32], &mut [i32]){
             slice::from_raw_parts_mut(ptr, mid),
             slice::from_raw_parts_mut(ptr.add(mid), len - mid)
         )
+    }
+}
+
+#[derive(Debug, PartialEq)]
+struct Point{
+    x: i32, y: i32
+}
+
+impl Add for Point{
+    type Output = Point;
+
+    fn add(self, other: Point) -> Point{
+        Point{
+            x: self.x + other.x,
+            y: self.y + other.y
+        }
+    }
+}
+
+#[derive(Debug)]
+struct Millimeters(u32);
+#[derive(Debug)]
+struct Meters(u32);
+
+/// This only allows `mm + m` but not `m + mm`.
+impl Add<Meters> for Millimeters{
+    type Output = Millimeters;
+
+    fn add(self, m: Meters) -> Millimeters{
+        Millimeters(self.0 + m.0 * 1000)
+    }
+}
+
+/// To allow `let res = m + mm;` we need to implement for add in that direction.
+impl Add<Millimeters> for Meters{
+    type Output = Millimeters;
+    fn add(self, mm: Millimeters) -> Millimeters{
+        Millimeters(self.0 * 1000 + mm.0)
     }
 }
