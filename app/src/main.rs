@@ -105,6 +105,28 @@ fn main() {
             let dp = DisplayPoint{x: -10, y: 5};
             dp.outline_print();
         }
+        {
+            println!("\nNewtype Pattern");
+            // We are going to implement trait we dont own for types we dont own!
+            struct Wrapper(Vec<String>);
+            impl fmt::Display for Wrapper{
+                fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result{
+                    write!(f, "[{}]", self.0.join(", "))
+                }
+            }
+            // how do we get length of inner vector now? Deref to rescue!
+            use std::ops::Deref;
+            impl Deref for Wrapper{
+                type Target = Vec<String>;
+                fn deref (&self) -> &Self::Target{
+                    &self.0
+                }
+            }
+
+            let v1 = Wrapper(vec![String::from("hello"), String::from("world")]);
+            println!("v1 = {}", v1);
+            println!("size of v1 = {}", v1.len());
+        }
     }
 }
 
