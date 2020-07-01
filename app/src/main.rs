@@ -151,7 +151,25 @@ fn main() {
                 println!("value = {}", value);
             }
         }
-        
+        {
+            println!("\nDynamically sized types");
+            // Below will error because rust needs to know how much memory a type needs
+            // at compile time. However, `str` is a dynamically sized type so we wont know size
+            // at compile time.
+            // let s1: str = "hello";
+            // let s2: str = "how are ya?";
+            // Solution: Use &str. &str contains a mem address and a usize field denoting len. This
+            // package will always be constant size.
+            let s1: &str = "hello";
+            let s2: &str = "how are ya?";
+            println!("s1 = {:?}, s2 = {:?}", s1, s2);
+            // All generic functions assume type has Size avail at compile time. To allow a type
+            // that is of dynamic size, do following.
+            // &T is a must because if it is a dyn sized type, we need refs at compile time!
+            fn <T: ?Sized>foobar(s: &T) -> !{
+                // println!("{:?}", T);
+            }
+        }
     }
 }
 
