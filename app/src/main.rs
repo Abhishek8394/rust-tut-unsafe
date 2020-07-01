@@ -127,6 +127,31 @@ fn main() {
             println!("v1 = {}", v1);
             println!("size of v1 = {}", v1.len());
         }
+
+        {
+            println!("\nType aliases");
+            type Kilometer = i32;
+            let x = 5;
+            let y: Kilometer = 5;
+            assert_eq!(x, y);
+            println!("i32 x: {:?} + Kilometer y: {:?} = {:?}", x, y, x + y);
+        }
+        {
+            println!("\nNever return type - \"!\"");
+            for guess in ["10", "hello", "4"].iter(){
+                println!("For guess = {}", guess);
+                // match requires everything to be of same type yet we still return continue.
+                // This is because continue is of never return type "!"
+                // Empty types (never return type) can be considered as any type for these purposes.
+                let value: u32 = match guess.trim().parse() {
+                    Ok(num) => num,
+                    // panic! also returns "!"
+                    Err(_) => continue,
+                };
+                println!("value = {}", value);
+            }
+        }
+        
     }
 }
 
