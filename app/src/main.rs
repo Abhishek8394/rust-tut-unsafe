@@ -166,6 +166,7 @@ fn main() {
             // All generic functions assume type has Size avail at compile time. To allow a type
             // that is of dynamic size, do following.
             // &T is a must because if it is a dyn sized type, we need refs at compile time!
+            // The syntax works for Sized trait only.
             fn <T: ?Sized>foobar(s: &T) -> !{
                 // println!("{:?}", T);
             }
