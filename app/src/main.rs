@@ -167,9 +167,47 @@ fn main() {
             // that is of dynamic size, do following.
             // &T is a must because if it is a dyn sized type, we need refs at compile time!
             // The syntax works for Sized trait only.
-            fn <T: ?Sized>foobar(s: &T) -> !{
+            fn foobar<T: ?Sized>(s: &T){
                 // println!("{:?}", T);
             }
+        }
+        {
+            println!("\nfunction pointers");
+            fn add_one(x: i32) -> i32{
+                x + 1
+            }
+            fn twice(f: fn(i32) -> i32, x: i32) -> i32{
+                f(x) + f(x)
+            }
+            println!("twice(add_one, 3) = {}", twice(add_one, 3));
+            // Any function that can take in Fn trait, can take in function pointer but not the other way round.
+            // Example for fn only - external C code, C can pass function pointers but not lambdas.
+            let list_of_numbers = vec![1, 2, 3];
+            let list_of_strings__lambdaOrFnTrait : Vec<String> = list_of_numbers
+                .iter().map(|x| x.to_string()).collect();
+            let list_of_strings__fnPointer : Vec<String> = list_of_numbers
+                .iter().map(ToString::to_string).collect();
+            assert_eq!(list_of_strings__lambdaOrFnTrait, list_of_strings__fnPointer);
+            assert_eq!(list_of_strings__lambdaOrFnTrait, vec![String::from("1"), String::from("2"), String::from("3")]);
+            // enum and structs when they define a type with `()` the initializers are actually implemented as functions.
+            // These functions can be used as function pointers too!
+            #[derive(Debug)]
+            enum Status{
+                Value(u32),
+                Stop
+            }
+            let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+            println!("Int to status enum using map: {:?}", list_of_statuses);
+            // Returning a function pointer from  a function.
+            fn return_fn() -> fn(i32) -> i32{
+                add_one
+            }
+            println!("return_fn()(3) = {}", return_fn()(3));
+            // Returning a closure from  a function.
+            fn return_closure() -> Box<dyn Fn(i32) -> i32>{
+                Box::new(|x| {x * 3})
+            }
+            println!("return_closure()(5) = {}", return_closure()(5));
         }
     }
 }
