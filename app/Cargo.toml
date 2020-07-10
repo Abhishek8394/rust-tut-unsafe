@@ -6,4 +6,6 @@ edition = "2018"
 
 [dependencies]
 unsafe_tut_core = { path = "../core" }
+my_macros = { path = "../my_macros" }
+hello_macro_derive = { path = "../my_macros/hello_macro_derive" }
 

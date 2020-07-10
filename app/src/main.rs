@@ -2,9 +2,10 @@ use std::ops::{Add};
 use std::slice;
 use std::fmt;
 use unsafe_tut_core;
+use my_macros::{myvec,HelloMacro};
+use hello_macro_derive::HelloMacro;
 mod overload;
 use crate::overload::{overload_demo};
-
 /// call code defined in C language!
 /// This is a FFI - Foreign function interface
 extern "C" {
@@ -210,6 +211,16 @@ fn main() {
             println!("return_closure()(5) = {}", return_closure()(5));
         }
     }
+    {
+        println!("\nMacros");
+        let x = myvec![1, 2, 4];
+        println!("declarative macro: myvec! : {:?}", x);
+        println!("\nprocedural macro");
+        let mm = Millimeters(5);
+        let m = Meters(10);
+        Millimeters::hello();
+        Meters::hello();
+    }
 }
 
 unsafe fn dangerous(){}
@@ -248,9 +259,9 @@ impl Add for Point{
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, HelloMacro)]
 struct Millimeters(u32);
-#[derive(Debug)]
+#[derive(Debug, HelloMacro)]
 struct Meters(u32);
 
 /// This only allows `mm + m` but not `m + mm`.
