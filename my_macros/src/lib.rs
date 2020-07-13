@@ -21,6 +21,22 @@ macro_rules! myvec {
     };
 }
 
+/// Experiment: custom macro for printing json format strings.
+/// Kinda JSON that is `{key: value}` where key and value may or may not be valid json.
+/// DOESN'T WORK
+// #[macro_export]
+// macro_rules! json{
+//     ({$($x:ident : $v:expr),*}) => {
+//         {
+//             println!("{");
+//             $(
+//                 println!("\"{:?}\": {:?},", $x, $v);
+//             )*
+//             println!("}");
+//         }
+//     };
+// }
+
 /// Procedural macros must be defined in separate crate than the one being 
 /// where it will be used.
 /// Instead of matching like in declarative macro, procedural macro

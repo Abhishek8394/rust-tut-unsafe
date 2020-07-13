@@ -2,7 +2,8 @@ use std::ops::{Add};
 use std::slice;
 use std::fmt;
 use unsafe_tut_core;
-use my_macros::{myvec,HelloMacro};
+use my_macros::{myvec, HelloMacro};
+// use my_macros::{myvec, HelloMacro, json};
 use hello_macro_derive::HelloMacro;
 mod overload;
 use crate::overload::{overload_demo};
@@ -220,6 +221,8 @@ fn main() {
         let m = Meters(10);
         Millimeters::hello();
         Meters::hello();
+
+        // json!({a : x, b : 2});
     }
 }
 
